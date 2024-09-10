@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using TMPro;
 
 public class InputGetKey : MonoBehaviour
 {
@@ -14,10 +15,16 @@ public class InputGetKey : MonoBehaviour
     [SerializeField]
     List<KeyCode> rmdKeyCodes;
 
-    const int kaburiNum = 8;
+    const int kaburiNum = 6;
 
     public List<KeyCode> inputKeys;
+
+
     public bool[] isKeyDown = new bool[4];
+
+    [SerializeField]
+    TextMeshPro[] rockTexts = new TextMeshPro[kaburiNum];
+
     public bool isAllKeyDown = true;
     // Start is called before the first frame update
     void Start()
