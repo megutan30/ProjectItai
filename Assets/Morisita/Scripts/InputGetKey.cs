@@ -12,7 +12,7 @@ public class InputGetKey : MonoBehaviour
     [SerializeField]
     List<KeyCode> rmdKeyCodes = new List<KeyCode>();
     [SerializeField]
-    private int maxKeys = 4; //Å‘åƒL[”‚ğİ’è‰Â”\‚É
+    private int maxKeys = 4; //ï¿½Å‘ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½İ’ï¿½Â”\ï¿½ï¿½
     const int kaburiNum = 10;
     public List<KeyCode> inputKeys = new List<KeyCode>();
     public List<bool> isKeyDown = new List<bool>();
@@ -95,7 +95,7 @@ public class InputGetKey : MonoBehaviour
                 inputKeys.Add(rmdKeyCodes[maxKeys-1]);
             }
         }
-        BoolReset(); // ƒL[•ÏXŒã‚É isKeyDown ‚ğXV
+        BoolReset(); // ï¿½Lï¿½[ï¿½ÏXï¿½ï¿½ï¿½ isKeyDown ï¿½ï¿½ï¿½Xï¿½V
     }
 
     private void UpdateKeyDisplays()
