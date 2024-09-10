@@ -15,8 +15,10 @@ public class BlockMovementSystem : MonoBehaviour
     public List<TextMeshProUGUI> keyDisplays { get; private set; } = new List<TextMeshProUGUI>();
 
     private bool isFlipped = false;
+    private Color defaultColor = Color.white;
+    private Color pressedColor = Color.red;
 
-    void Start()
+    void Awake()
     {
         InitializeBlocks();
     }
@@ -92,10 +94,25 @@ public class BlockMovementSystem : MonoBehaviour
                 {
                     textMesh.text = keyString;
                 }
+                textMesh.color = defaultColor;
             }
             else
             {
                 textMesh.text = "";
+            }
+        }
+    }
+    public void UpdateKeyColors(List<int> pressedKeyIndices)
+    {
+        for (int i = 0; i < keyDisplays.Count; i++)
+        {
+            if (pressedKeyIndices.Contains(i))
+            {
+                keyDisplays[i].color = pressedColor;
+            }
+            else
+            {
+                keyDisplays[i].color = defaultColor;
             }
         }
     }

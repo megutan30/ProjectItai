@@ -17,12 +17,9 @@ public class SoundManager : MonoBehaviour
     {
         None,
         ButtonClick,
-        Jump,
+        Monkey,
         Explosion,
-        Coin,
         MainTheme,
-        BossTheme,
-        VictoryFanfare,
         GameOver
     }
 
