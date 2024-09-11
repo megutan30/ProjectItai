@@ -20,7 +20,9 @@ public class SoundManager : MonoBehaviour
         Monkey,
         Explosion,
         MainTheme,
-        GameOver
+        GameOver,
+        grasp
+
     }
 
     [System.Serializable]
