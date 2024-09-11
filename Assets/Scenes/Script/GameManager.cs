@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,8 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private BlockClimbInputGetKey inputGetKey;
     [SerializeField] private TextMeshProUGUI timeText; // 時間表示用のテキスト
-    //[SerializeField] private GameObject clearUI; // クリア時に表示する UI
-    //[SerializeField] private TextMeshProUGUI clearTimeText; // クリア時間表示用のテキスト
+    [SerializeField] private GameObject StartPanel;
+    [SerializeField] private BlockClimbCount BlockClimbCount;
+    [SerializeField] private GameObject clearUI; // クリア時に表示する UI
+    [SerializeField] private TextMeshProUGUI clearTimeText; // クリア時間表示用のテキスト
 
     private float timer = 0f;
     private float gameTime = 0f; // ゲーム時間を追跡
@@ -21,10 +24,10 @@ public class GameManager : MonoBehaviour
         {
             gameOver.gameObject.SetActive(false);
         }
-        //if (clearUI != null)
-        //{
-        //    clearUI.SetActive(false);
-        //}
+        if (clearUI != null)
+        {
+            clearUI.SetActive(false);
+        }
         UpdateTimeDisplay();
     }
 
@@ -53,6 +56,11 @@ public class GameManager : MonoBehaviour
         else
         {
             timer = 0f;
+        }
+
+        if (BlockClimbCount.GetGoalHeight() <= BlockClimbCount.climbCount)
+        {
+            GameClear();
         }
 
         // ここにゲームクリアの条件を追加
@@ -89,32 +97,35 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.PlaySFX(SoundManager.SoundType.GameOver);
     }
 
-    //private void GameClear()
-    //{
-    //    GameDirector.GameOver = true; // ゲームを停止
-    //    if (clearUI != null)
-    //    {
-    //        clearUI.SetActive(true);
-    //    }
-    //    if (clearTimeText != null)
-    //    {
-    //        clearTimeText.text = $"Clear Time: {gameTime:F2}";
-    //    }
-    //}
+    private void GameClear()
+    {
+        GameDirector.GameOver = true; // ゲームを停止
+        if (clearUI != null)
+        {
+            clearUI.SetActive(true);
+        }
+        if (clearTimeText != null)
+        {
+            clearTimeText.text = $"Clear Time: {gameTime:F2}";
+        }
+    }
 
     private void Restart()
     {
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        StartPanel.SetActive(false);
         GameDirector.GameOver = false;
         GameDirector.hasStarted = false;
         gameTime = 0f;
+        BlockClimbCount.climbCount = 0;
         if (gameOver != null)
         {
             gameOver.gameObject.SetActive(false);
         }
-        //if (clearUI != null)
-        //{
-        //    clearUI.SetActive(false);
-        //}
+        if (clearUI != null)
+        {
+            clearUI.SetActive(false);
+        }
         ResetTimer();
         UpdateTimeDisplay();
     }

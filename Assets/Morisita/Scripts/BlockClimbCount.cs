@@ -5,12 +5,15 @@ using UnityEngine.UI;
 
 public class BlockClimbCount : MonoBehaviour
 {
-    [SerializeField] private int climbCount = 0;
+    [SerializeField] public int climbCount = 0;
     [SerializeField] private int LimitClimbCount = 0;
-    [SerializeField] private int goalHeight = 30;
+    [SerializeField] private int goalHeight = 25;
 
     [SerializeField] private Image[] countImages; // クライム回数の各桁に対応する画像
     [SerializeField] private Sprite[] numberSprites; // 0-9の数字に対応するスプライト
+
+    private int restClimb = 100;
+    private int reduece; 
 
     void Start()
     {
@@ -23,17 +26,24 @@ public class BlockClimbCount : MonoBehaviour
         {
             Debug.LogWarning("画像またはスプライトが正しく設定されていません。");
         }
+        reduece = 100 / (25);
     }
 
     void Update()
     {
+        CalucateRestClimb();
         UpdateDisplays();
+    }
+
+    void CalucateRestClimb()
+    {
+        restClimb = 100 - (reduece * climbCount);
     }
 
     private void UpdateDisplays()
     {
         LimitClimbCount = goalHeight - climbCount;
-        UpdateNumberDisplay(countImages, climbCount);
+        UpdateNumberDisplay(countImages, restClimb);
     }
 
     private void UpdateNumberDisplay(Image[] images, int number)
