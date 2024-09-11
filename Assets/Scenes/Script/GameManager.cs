@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         //{
         //    clearUI.SetActive(false);
         //}
+        ResetTimer();
         UpdateTimeDisplay();
     }
 
