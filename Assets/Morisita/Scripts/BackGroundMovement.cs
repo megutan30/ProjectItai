@@ -13,6 +13,8 @@ public class BackGroundMovement : MonoBehaviour
 
     [SerializeField]
     private float moveTime = 1;
+
+    public AnimationCurve curve;
     [SerializeField]
     private float time = 0;
 
@@ -51,7 +53,7 @@ public class BackGroundMovement : MonoBehaviour
         if (isBGMove)
         {
             time += Time.deltaTime / moveTime;
-            backGroundImage.transform.position = Vector3.Lerp(bgImageOldTF, bgImageNowTF, time);
+            backGroundImage.transform.position = Vector3.Lerp(bgImageOldTF, bgImageNowTF,curve.Evaluate(time));
             if (time > 1)
             {
                 time = 0;
