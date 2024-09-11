@@ -8,17 +8,23 @@ public class BlockClimbCount : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private int climbCount = 0;
+    [SerializeField]
+    private int LimitClimbCount = 0;
 
     [SerializeField]
     private int goalHeight = 30;
 
     [SerializeField]
     private TextMeshProUGUI countText;
+    [SerializeField]
+    private TextMeshProUGUI limitCountText;
     void Start()
     {
         if (countText != null)
         {
+            LimitClimbCount = goalHeight - climbCount;
             countText.text = "ClimbCount : " + climbCount.ToString("000");
+            limitCountText.text = "limitCount : " + LimitClimbCount.ToString("000");
         }
         else
         {
@@ -34,7 +40,9 @@ public class BlockClimbCount : MonoBehaviour
 
     public void DisplayCount()
     {
-        countText.text= "ClimbCount : " + climbCount.ToString("000");
+        LimitClimbCount = goalHeight - climbCount;
+        countText.text = "ClimbCount : " + climbCount.ToString("000");
+        limitCountText.text = "limitCount : " + LimitClimbCount.ToString("000");
     }
     public void AddClimbCount()
     {
