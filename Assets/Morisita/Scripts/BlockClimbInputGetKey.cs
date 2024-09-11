@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class InputGetKey : MonoBehaviour
+public class BlockClimbInputGetKey : MonoBehaviour
 {
     [SerializeField]
     List<KeyCode> rnKeyCodes = new List<KeyCode>{ KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.I, KeyCode.O, KeyCode.P,
@@ -18,6 +18,10 @@ public class InputGetKey : MonoBehaviour
 
     [SerializeField] private BlockMovementSystem blockSystem;
     [SerializeField] private GameManager gameManager;
+    [SerializeField]
+    private BlockMovementSystem blockSystem;
+    [SerializeField]
+    private BlockClimbCount blockCount;
 
     void Start()
     {
@@ -51,6 +55,7 @@ public class InputGetKey : MonoBehaviour
             UpdateKeyDisplays();
             blockSystem.FlipBlocks();
             if(!GameDirector.hasStarted)GameDirector.hasStarted = true;
+            blockCount.AddClimbCount();
         }
     }
 
