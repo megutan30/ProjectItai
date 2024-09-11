@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class BlockClimbInputGetKey : MonoBehaviour
 {
@@ -46,6 +47,14 @@ public class BlockClimbInputGetKey : MonoBehaviour
             {
                 isAllKeyDown = false;
             }
+        }
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isAllKeyDown = true;
+        }
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            isAllKeyDown = true;
         }
         blockSystem.UpdateKeyColors(pressedKeyIndices);
         if (isAllKeyDown && inputKeys.Count > 0)
