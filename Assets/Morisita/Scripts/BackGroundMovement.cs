@@ -11,7 +11,12 @@ public class BackGroundMovement : MonoBehaviour
     private SpriteRenderer backGroundImage;
 
     [SerializeField]
+    private float imageHeightCorrectionValue;
+
+    [SerializeField]
     private float bgImageNowHeight;
+
+    private float bgImageOriginalHeight;
 
     private int oldClimbCount;
     // Start is called before the first frame update
@@ -19,7 +24,9 @@ public class BackGroundMovement : MonoBehaviour
     {
         if (blockClimbCount != null)
         {
-            float height = backGroundImage.bounds.size.y;
+            float height = backGroundImage.bounds.size.y-imageHeightCorrectionValue;
+
+            bgImageOriginalHeight=backGroundImage.transform.position.y;
             bgImageNowHeight = height * blockClimbCount.GetClimbCount() / blockClimbCount.GetGoalHeight();
         }
         else
@@ -33,18 +40,19 @@ public class BackGroundMovement : MonoBehaviour
     {
         if (oldClimbCount != blockClimbCount.GetClimbCount())
             BGDisplay();
+
         oldClimbCount = blockClimbCount.GetClimbCount();
 
     }
 
     public float GetBGHeight()
     {
-        float height = backGroundImage.bounds.size.y;
+        float height = backGroundImage.bounds.size.y-imageHeightCorrectionValue;
         return bgImageNowHeight = height * blockClimbCount.GetClimbCount() / blockClimbCount.GetGoalHeight();
     }
     public void BGDisplay()
     {
-        float height = backGroundImage.transform.position.y- GetBGHeight();
-        backGroundImage.transform.position = new(backGroundImage.transform.position.x, height, backGroundImage.transform.position.z);
+        bgImageNowHeight=bgImageOriginalHeight- GetBGHeight();
+        backGroundImage.transform.position = new(backGroundImage.transform.position.x, bgImageNowHeight, backGroundImage.transform.position.z);
     }
 }
