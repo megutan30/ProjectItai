@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private float gameOverTime = 3f;
     [SerializeField] private GameObject gameOver;
-    [SerializeField] private InputGetKey inputGetKey;
+    [SerializeField] private BlockClimbInputGetKey inputGetKey;
     [SerializeField] private TextMeshProUGUI timeText; // 時間表示用のテキスト
     //[SerializeField] private GameObject clearUI; // クリア時に表示する UI
     //[SerializeField] private TextMeshProUGUI clearTimeText; // クリア時間表示用のテキスト

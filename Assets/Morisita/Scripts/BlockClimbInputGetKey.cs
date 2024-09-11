@@ -18,8 +18,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
 
     [SerializeField] private BlockMovementSystem blockSystem;
     [SerializeField] private GameManager gameManager;
-    [SerializeField]
-    private BlockMovementSystem blockSystem;
+
     [SerializeField]
     private BlockClimbCount blockCount;
 
