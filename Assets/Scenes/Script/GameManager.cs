@@ -76,14 +76,17 @@ public class GameManager : MonoBehaviour
         timer = 0f;
     }
 
+
     private void GameOver()
     {
         GameDirector.GameOver = true;
         if (gameOver != null)
         {
             gameOver.gameObject.SetActive(true);
+           // SoundManager.Instance.PlayBGM(SoundManager.SoundType.GameOver);
         }
         inputGetKey.SetGameOverState(true);
+        SoundManager.Instance.PlaySFX(SoundManager.SoundType.GameOver);
     }
 
     //private void GameClear()
