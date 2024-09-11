@@ -41,6 +41,11 @@ public class BlockClimbCount : MonoBehaviour
         climbCount++;
     }
 
+    public bool IsClearCheck()
+    {
+        return climbCount >= goalHeight ? true : false;
+    }
+
     public int GetClimbCount()
     {
         return climbCount;
