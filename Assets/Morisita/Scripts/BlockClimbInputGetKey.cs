@@ -10,7 +10,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
                               KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L,
                               KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M,
                               KeyCode.Alpha0,KeyCode.Alpha1,KeyCode.Alpha2,KeyCode.Alpha3,KeyCode.Alpha4,KeyCode.Alpha5,KeyCode.Alpha6,KeyCode.Alpha7,KeyCode.Alpha8,KeyCode.Alpha9};
-    [SerializeField] List<KeyCode> rmdKeyCodes = new List<KeyCode>();
+    public List<KeyCode> rmdKeyCodes = new List<KeyCode>();
     [SerializeField] private int maxKeys = 4;
     const int kaburiNum = 10;
     public List<KeyCode> inputKeys = new List<KeyCode>();
@@ -26,8 +26,27 @@ public class BlockClimbInputGetKey : MonoBehaviour
 
     void Start()
     {
+        if (rmdKeyCodes.Count == 0)
+        {
+            // もしインスペクターでrmdKeyCodesが設定されていない場合、ランダムに初期化
+            InitializeRmdKeyCodes();
+        }
         InitKeySet();
         UpdateKeyDisplays();
+    }
+
+    void InitializeRmdKeyCodes()
+    {
+        List<KeyCode> tempKeys = new List<KeyCode>(rnKeyCodes);
+        for (int i = 0; i < kaburiNum; i++)
+        {
+            if (tempKeys.Count > 0)
+            {
+                int index = Random.Range(0, tempKeys.Count);
+                rmdKeyCodes.Add(tempKeys[index]);
+                tempKeys.RemoveAt(index);
+            }
+        }
     }
 
     void Update()
@@ -97,16 +116,10 @@ public class BlockClimbInputGetKey : MonoBehaviour
 
     public void InitKeySet()
     {
-        rmdKeyCodes.Clear();
         inputKeys.Clear();
-        for (int i = 0; i < kaburiNum; i++)
+        for (int i = 0; i < Mathf.Min(maxKeys, rmdKeyCodes.Count); i++)
         {
-            int rnd = Random.Range(0, rnKeyCodes.Count);
-            KeyCode key = rnKeyCodes[rnd];
-            rnKeyCodes.RemoveAt(rnd);
-            if (i < maxKeys)
-                inputKeys.Add(key);
-            rmdKeyCodes.Add(key);
+            inputKeys.Add(rmdKeyCodes[i]);
         }
         BoolReset();
     }
@@ -119,10 +132,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
         }
         if (rmdKeyCodes.Count > 0)
         {
-            int rnd = Random.Range(0, rnKeyCodes.Count);
-            KeyCode key = rnKeyCodes[rnd];
-            rnKeyCodes.RemoveAt(rnd);
-            rnKeyCodes.Add(rmdKeyCodes[0]);
+            KeyCode key = rmdKeyCodes[0];
             rmdKeyCodes.RemoveAt(0);
             rmdKeyCodes.Add(key);
             if (inputKeys.Count < maxKeys)

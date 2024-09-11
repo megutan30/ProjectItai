@@ -1,49 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class BlockClimbCount : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField]
-    private int climbCount = 0;
-    [SerializeField]
-    private int LimitClimbCount = 0;
+    [SerializeField] private int climbCount = 0;
+    [SerializeField] private int LimitClimbCount = 0;
+    [SerializeField] private int goalHeight = 30;
 
-    [SerializeField]
-    private int goalHeight = 30;
+    [SerializeField] private Image[] countImages; // クライム回数の各桁に対応する画像
+    [SerializeField] private Sprite[] numberSprites; // 0-9の数字に対応するスプライト
 
-    [SerializeField]
-    private TextMeshProUGUI countText;
-    [SerializeField]
-    private TextMeshProUGUI limitCountText;
     void Start()
     {
-        if (countText != null)
+        if (countImages != null && numberSprites != null && numberSprites.Length == 10)
         {
             LimitClimbCount = goalHeight - climbCount;
-            countText.text = "ClimbCount : " + climbCount.ToString("000");
-            limitCountText.text = "limitCount : " + LimitClimbCount.ToString("000");
+            UpdateDisplays();
         }
         else
         {
-            Debug.LogWarning("カウント用のテキストがありません。");
+            Debug.LogWarning("画像またはスプライトが正しく設定されていません。");
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        DisplayCount();
+        UpdateDisplays();
     }
 
-    public void DisplayCount()
+    private void UpdateDisplays()
     {
         LimitClimbCount = goalHeight - climbCount;
-        countText.text = "ClimbCount : " + climbCount.ToString("000");
-        limitCountText.text = "limitCount : " + LimitClimbCount.ToString("000");
+        UpdateNumberDisplay(countImages, climbCount);
     }
+
+    private void UpdateNumberDisplay(Image[] images, int number)
+    {
+        string numberString = number.ToString("000");
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < images.Length)
+            {
+                int digit = int.Parse(numberString[i].ToString());
+                images[i].sprite = numberSprites[digit];
+            }
+        }
+    }
+
     public void AddClimbCount()
     {
         climbCount++;
@@ -51,13 +56,14 @@ public class BlockClimbCount : MonoBehaviour
 
     public bool IsClearCheck()
     {
-        return climbCount >= goalHeight ? true : false;
+        return climbCount >= goalHeight;
     }
 
     public int GetClimbCount()
     {
         return climbCount;
     }
+
     public int GetGoalHeight()
     {
         return goalHeight;
