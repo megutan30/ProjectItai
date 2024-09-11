@@ -9,17 +9,15 @@ public class InputGetKey : MonoBehaviour
                               KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L,
                               KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M,
                               KeyCode.Alpha0,KeyCode.Alpha1,KeyCode.Alpha2,KeyCode.Alpha3,KeyCode.Alpha4,KeyCode.Alpha5,KeyCode.Alpha6,KeyCode.Alpha7,KeyCode.Alpha8,KeyCode.Alpha9};
-    [SerializeField]
-    List<KeyCode> rmdKeyCodes = new List<KeyCode>();
-    [SerializeField]
-    private int maxKeys = 4;
+    [SerializeField] List<KeyCode> rmdKeyCodes = new List<KeyCode>();
+    [SerializeField] private int maxKeys = 4;
     const int kaburiNum = 10;
     public List<KeyCode> inputKeys = new List<KeyCode>();
     public List<bool> isKeyDown = new List<bool>();
     public bool isAllKeyDown = true;
 
-    [SerializeField]
-    private BlockMovementSystem blockSystem;
+    [SerializeField] private BlockMovementSystem blockSystem;
+    [SerializeField] private GameManager gameManager;
 
     void Start()
     {
@@ -29,6 +27,7 @@ public class InputGetKey : MonoBehaviour
 
     void Update()
     {
+        if (GameDirector.GameOver) return;
         BoolReset();
         isAllKeyDown = true;
         List<int> pressedKeyIndices = new List<int>();
@@ -51,6 +50,7 @@ public class InputGetKey : MonoBehaviour
             KeyChange();
             UpdateKeyDisplays();
             blockSystem.FlipBlocks();
+            if(!GameDirector.hasStarted)GameDirector.hasStarted = true;
         }
     }
 
@@ -123,5 +123,14 @@ public class InputGetKey : MonoBehaviour
                 blockSystem.keyDisplays[i].text = "";
             }
         }
+    }
+    public int GetPressedKeyCount()
+    {
+        return isKeyDown.FindAll(x => x).Count;
+    }
+
+    public void SetGameOverState(bool state)
+    {
+        GameDirector.GameOver = state;
     }
 }

@@ -1,16 +1,15 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField]
     private int minute;
-    [SerializeField]
     private float seconds;
     //　前のUpdateの時の秒数
     private float oldSeconds;
     //　タイマー表示用テキスト
-    private Text timerText;
+    [SerializeField]private TextMeshProUGUI timerText;
     // タイマーが動作しているかどうか
     private bool isTimerRunning = true;
 
@@ -19,12 +18,11 @@ public class Timer : MonoBehaviour
         minute = 0;
         seconds = 0f;
         oldSeconds = 0f;
-        timerText = GetComponentInChildren<Text>();
     }
 
     void Update()
     {
-        if (isTimerRunning) // タイマーが動作中なら
+        if (isTimerRunning||GameDirector.IsGameStart) // タイマーが動作中なら
         {
             seconds += Time.deltaTime;
             if (seconds >= 60f)
