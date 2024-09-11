@@ -1162,7 +1162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterVolume: 1
-  sfxVolume: 1
+  sfxVolume: 2
   bgmVolume: 1
   preloadedSounds:
   - type: 1

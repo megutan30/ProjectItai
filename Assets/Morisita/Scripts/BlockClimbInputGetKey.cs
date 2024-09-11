@@ -79,6 +79,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
         blockSystem.UpdateKeyColors(pressedKeyIndices);
         if (isAllKeyDown && inputKeys.Count > 0)
         {
+
             KeyChange();
             UpdateKeyDisplays();
             blockSystem.FlipBlocks();
@@ -95,10 +96,12 @@ public class BlockClimbInputGetKey : MonoBehaviour
             if (useRightArm)
             {
                 characterAnimator.SetTrigger("RightArm");
+                SoundManager.Instance.PlaySFX(SoundManager.SoundType.grasp);
             }
             else
             {
                 characterAnimator.SetTrigger("LeftArm");
+                SoundManager.Instance.PlaySFX(SoundManager.SoundType.grasp);
             }
             useRightArm = !useRightArm;
         }
