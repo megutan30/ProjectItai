@@ -19,9 +19,10 @@ public class BlockClimbInputGetKey : MonoBehaviour
 
     [SerializeField] private BlockMovementSystem blockSystem;
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private BlockClimbCount blockCount;
+    [SerializeField] private Animator characterAnimator;
 
-    [SerializeField]
-    private BlockClimbCount blockCount;
+    private bool useRightArm = true;
 
     void Start()
     {
@@ -48,7 +49,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
                 isAllKeyDown = false;
             }
         }
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             isAllKeyDown = true;
         }
@@ -62,8 +63,25 @@ public class BlockClimbInputGetKey : MonoBehaviour
             KeyChange();
             UpdateKeyDisplays();
             blockSystem.FlipBlocks();
-            if(!GameDirector.hasStarted)GameDirector.hasStarted = true;
+            if (!GameDirector.hasStarted) GameDirector.hasStarted = true;
             blockCount.AddClimbCount();
+            TriggerArmAnimation();
+        }
+    }
+
+    private void TriggerArmAnimation()
+    {
+        if (characterAnimator != null)
+        {
+            if (useRightArm)
+            {
+                characterAnimator.SetTrigger("RightArm");
+            }
+            else
+            {
+                characterAnimator.SetTrigger("LeftArm");
+            }
+            useRightArm = !useRightArm;
         }
     }
 
@@ -109,7 +127,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
             rmdKeyCodes.Add(key);
             if (inputKeys.Count < maxKeys)
             {
-                inputKeys.Add(rmdKeyCodes[maxKeys-1]);
+                inputKeys.Add(rmdKeyCodes[maxKeys - 1]);
             }
         }
         BoolReset();
@@ -137,6 +155,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
             }
         }
     }
+
     public int GetPressedKeyCount()
     {
         return isKeyDown.FindAll(x => x).Count;

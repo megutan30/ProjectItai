@@ -7,7 +7,9 @@ public class BlockMovementSystem : MonoBehaviour
     public GameObject blockPrefab;
     public int columnCount = 2;
     public int rowCount = 5;
-    public float blockSpacing = 1f;
+    public float blockSpacingx = 1f;
+    public float blockSpacingy = 1f;
+
     public float columnOffset = 0.5f;
 
     private List<GameObject> leftBlocks = new List<GameObject>();
@@ -25,7 +27,7 @@ public class BlockMovementSystem : MonoBehaviour
 
     void InitializeBlocks()
     {
-        float centerX = (columnCount - 1) * blockSpacing * 0.5f;
+        float centerX = (columnCount - 1) * blockSpacingx * 0.5f;
 
         for (int i = 0; i < rowCount; i++)
         {
@@ -50,8 +52,8 @@ public class BlockMovementSystem : MonoBehaviour
 
     Vector3 CalculateBlockPosition(int row, int column)
     {
-        float xPos = column * blockSpacing;
-        float yPos = row * blockSpacing;
+        float xPos = column * blockSpacingx;
+        float yPos = row * blockSpacingy;
 
         if (column % 2 == 1)
         {
