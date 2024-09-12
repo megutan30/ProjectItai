@@ -23,12 +23,12 @@ public class BlockClimbInputGetKey : MonoBehaviour
     [SerializeField] private Animator characterAnimator;
 
     private bool useRightArm = true;
+    private int currentKeyIndex = 0;
 
     void Start()
     {
         if (rmdKeyCodes.Count == 0)
         {
-            // もしインスペクターでrmdKeyCodesが設定されていない場合、ランダムに初期化
             InitializeRmdKeyCodes();
         }
         InitKeySet();
@@ -61,7 +61,7 @@ public class BlockClimbInputGetKey : MonoBehaviour
             if (Input.GetKey(inputKeys[i]))
             {
                 isKeyDown[i] = true;
-                pressedKeyIndices.Add(rmdKeyCodes.IndexOf(inputKeys[i]));
+                pressedKeyIndices.Add(i);
             }
             else
             {
@@ -79,13 +79,71 @@ public class BlockClimbInputGetKey : MonoBehaviour
         blockSystem.UpdateKeyColors(pressedKeyIndices);
         if (isAllKeyDown && inputKeys.Count > 0)
         {
-
             KeyChange();
             UpdateKeyDisplays();
             blockSystem.FlipBlocks();
             if (!GameDirector.hasStarted) GameDirector.hasStarted = true;
             blockCount.AddClimbCount();
             TriggerArmAnimation();
+        }
+    }
+
+    public void ResetKeys()
+    {
+        currentKeyIndex = 0;
+        InitKeySet();
+        UpdateKeyDisplays();
+    }
+
+    public void InitKeySet()
+    {
+        inputKeys.Clear();
+        for (int i = 0; i < maxKeys; i++)
+        {
+            inputKeys.Add(rmdKeyCodes[(currentKeyIndex + i) % rmdKeyCodes.Count]);
+        }
+        BoolReset();
+    }
+
+    public void KeyChange()
+    {
+        currentKeyIndex = (currentKeyIndex + 1) % rmdKeyCodes.Count;
+        inputKeys.RemoveAt(0);
+        inputKeys.Add(rmdKeyCodes[(currentKeyIndex + maxKeys - 1) % rmdKeyCodes.Count]);
+        BoolReset();
+    }
+
+    private void UpdateKeyDisplays()
+    {
+        for (int i = 0; i < blockSystem.keyDisplays.Count; i++)
+        {
+            if (i < kaburiNum)
+            {
+                int keyIndex = (currentKeyIndex + i) % rmdKeyCodes.Count;
+                string keyString = rmdKeyCodes[keyIndex].ToString();
+                if (keyString.StartsWith("Alpha"))
+                {
+                    blockSystem.keyDisplays[i].text = keyString.Substring(5);
+                }
+                else
+                {
+                    blockSystem.keyDisplays[i].text = keyString;
+                }
+
+                // 入力が必要なキーを強調表示（オプション）
+                if (i < maxKeys)
+                {
+                    blockSystem.keyDisplays[i].color = Color.yellow; // または他の目立つ色
+                }
+                else
+                {
+                    blockSystem.keyDisplays[i].color = Color.white;
+                }
+            }
+            else
+            {
+                blockSystem.keyDisplays[i].text = "";
+            }
         }
     }
 
@@ -117,58 +175,6 @@ public class BlockClimbInputGetKey : MonoBehaviour
         isAllKeyDown = false;
     }
 
-    public void InitKeySet()
-    {
-        inputKeys.Clear();
-        for (int i = 0; i < Mathf.Min(maxKeys, rmdKeyCodes.Count); i++)
-        {
-            inputKeys.Add(rmdKeyCodes[i]);
-        }
-        BoolReset();
-    }
-
-    public void KeyChange()
-    {
-        if (inputKeys.Count > 0)
-        {
-            inputKeys.RemoveAt(0);
-        }
-        if (rmdKeyCodes.Count > 0)
-        {
-            KeyCode key = rmdKeyCodes[0];
-            rmdKeyCodes.RemoveAt(0);
-            rmdKeyCodes.Add(key);
-            if (inputKeys.Count < maxKeys)
-            {
-                inputKeys.Add(rmdKeyCodes[maxKeys - 1]);
-            }
-        }
-        BoolReset();
-    }
-
-    private void UpdateKeyDisplays()
-    {
-        for (int i = 0; i < blockSystem.keyDisplays.Count; i++)
-        {
-            if (i < rmdKeyCodes.Count)
-            {
-                string keyString = rmdKeyCodes[i].ToString();
-                if (keyString.StartsWith("Alpha"))
-                {
-                    blockSystem.keyDisplays[i].text = keyString.Substring(5);
-                }
-                else
-                {
-                    blockSystem.keyDisplays[i].text = keyString;
-                }
-            }
-            else
-            {
-                blockSystem.keyDisplays[i].text = "";
-            }
-        }
-    }
-
     public int GetPressedKeyCount()
     {
         return isKeyDown.FindAll(x => x).Count;
@@ -177,5 +183,15 @@ public class BlockClimbInputGetKey : MonoBehaviour
     public void SetGameOverState(bool state)
     {
         GameDirector.GameOver = state;
+    }
+
+    private void ResetInputKeys()
+    {
+        inputKeys.Clear();
+        for (int i = 0; i < Mathf.Min(maxKeys, rmdKeyCodes.Count); i++)
+        {
+            inputKeys.Add(rmdKeyCodes[i]);
+        }
+        BoolReset();
     }
 }

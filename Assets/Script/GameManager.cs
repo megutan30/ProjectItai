@@ -1,7 +1,6 @@
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,26 +8,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float gameOverTime = 3f;
     [SerializeField] private GameObject gameOver;
     [SerializeField] private BlockClimbInputGetKey inputGetKey;
-    [SerializeField] private TextMeshProUGUI timeText; // 時間表示用のテキスト
+    [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private GameObject StartPanel;
     [SerializeField] private BlockClimbCount BlockClimbCount;
-    [SerializeField] private GameObject clearUI; // クリア時に表示する UI
-    [SerializeField] private TextMeshProUGUI clearTimeText; // クリア時間表示用のテキスト
+    [SerializeField] private GameObject clearUI;
+    [SerializeField] private TextMeshProUGUI clearTimeText;
+    [SerializeField] private BackGroundMovement backGroundMovement;
 
     private float timer = 0f;
-    private float gameTime = 0f; // ゲーム時間を追跡
+    private float gameTime = 0f;
 
     private void Start()
     {
-        if (gameOver != null)
-        {
-            gameOver.gameObject.SetActive(false);
-        }
-        if (clearUI != null)
-        {
-            clearUI.SetActive(false);
-        }
-        UpdateTimeDisplay();
+        InitializeGame();
     }
 
     private void Update()
@@ -36,15 +28,20 @@ public class GameManager : MonoBehaviour
         if (GameDirector.GameOver)
         {
             if (Input.GetKeyDown(KeyCode.R)) Restart();
+            return;
         }
-        if (GameDirector.GameOver || !GameDirector.hasStarted) return;
 
-        // ゲーム時間を更新
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            StartPanel.SetActive(false);
+        }
+
+        if (!GameDirector.hasStarted) return;
+
         gameTime += Time.deltaTime;
         UpdateTimeDisplay();
 
         int pressedKeyCount = inputGetKey.GetPressedKeyCount();
-
         if (pressedKeyCount <= 2)
         {
             timer += Time.deltaTime;
@@ -62,13 +59,6 @@ public class GameManager : MonoBehaviour
         {
             GameClear();
         }
-
-        // ここにゲームクリアの条件を追加
-        if (GameDirector.GameClear)
-        {
-            timeText.gameObject.SetActive(true);
-            //GameClear();
-        }
     }
 
     private void UpdateTimeDisplay()
@@ -79,19 +69,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetTimer()
-    {
-        timer = 0f;
-    }
-
-
     private void GameOver()
     {
         GameDirector.GameOver = true;
         if (gameOver != null)
         {
             gameOver.gameObject.SetActive(true);
-           // SoundManager.Instance.PlayBGM(SoundManager.SoundType.GameOver);
         }
         inputGetKey.SetGameOverState(true);
         SoundManager.Instance.PlaySFX(SoundManager.SoundType.GameOver);
@@ -99,7 +82,7 @@ public class GameManager : MonoBehaviour
 
     private void GameClear()
     {
-        GameDirector.GameOver = true; // ゲームを停止
+        GameDirector.GameOver = true;
         if (clearUI != null)
         {
             clearUI.SetActive(true);
@@ -112,10 +95,18 @@ public class GameManager : MonoBehaviour
 
     private void Restart()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        StartPanel.SetActive(false);
+        InitializeGame();
+        inputGetKey.ResetKeys();
+        backGroundMovement.ResetPosition();
+        BlockClimbCount.climbCount = 0;  // クライムカウントをリセット
+    }
+
+    private void InitializeGame()
+    {
+        //StartPanel.SetActive(false);
         GameDirector.GameOver = false;
         GameDirector.hasStarted = false;
+        GameDirector.GameClear = false;
         gameTime = 0f;
         BlockClimbCount.climbCount = 0;
         if (gameOver != null)
@@ -126,7 +117,7 @@ public class GameManager : MonoBehaviour
         {
             clearUI.SetActive(false);
         }
-        ResetTimer();
+        timer = 0f;
         UpdateTimeDisplay();
     }
 

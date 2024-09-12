@@ -444,7 +444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   climbCount: 0
   LimitClimbCount: 0
-  goalHeight: 26
+  goalHeight: 24
   countImages:
   - {fileID: 368398762}
   - {fileID: 852508558}
@@ -740,6 +740,7 @@ MonoBehaviour:
   BlockClimbCount: {fileID: 314324252}
   clearUI: {fileID: 775459659}
   clearTimeText: {fileID: 724686990}
+  backGroundMovement: {fileID: 789301935}
 --- !u!4 &584192963
 Transform:
   m_ObjectHideFlags: 0
@@ -1130,7 +1131,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  time: 0
   imageHeightCorrectionValue: 0
 --- !u!1 &792198587
 GameObject:
